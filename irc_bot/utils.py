@@ -22,7 +22,7 @@ def is_channel(string):
 
 def strip_irc_colors(data):
     """Strip mirc colors from string. Expects data to be decoded."""
-    return re.sub('[\x02\x0F\x16\x1D\x1F]|\x03(\d{1,2}(,\d{1,2})?)?', '', data)
+    return re.sub(r'[\x02\x0F\x16\x1D\x1F]|\x03(\d{1,2}(,\d{1,2})?)?', '', data)
 
 
 def strip_invisible(data):
@@ -32,7 +32,7 @@ def strip_invisible(data):
     while i < len(data):
         c = data[i]
         if c == '\x03':
-            match = re.match('^(\x03(?:(\d{1,2})(?:,(\d{1,2}))(.?)?)?)', data[i:])
+            match = re.match(r'^(\x03(?:(\d{1,2})(?:,(\d{1,2}))(.?)?)?)', data[i:])
             # if the colors match eg. \x031,1a, then "a" has same foreground and background color -> invisible
             if match and match.group(2) == match.group(3):
                 if match.group(4) and ord(match.group(4)) > 31:

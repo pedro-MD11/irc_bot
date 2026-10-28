@@ -395,7 +395,10 @@ class SimpleIRCBot(asynchat.async_chat):
         if self.use_ssl:
             try:
                 self.socket.setblocking(True)
-                self.socket = ssl.wrap_socket(self.socket)
+                context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+                context.check_hostname = False
+                context.verify_mode = ssl.CERT_NONE
+                self.socket = context.wrap_socket(self.socket)
             except (ssl.SSLWantReadError, ssl.SSLWantWriteError) as e:
                 log.debug(e)
                 self._handshake()
